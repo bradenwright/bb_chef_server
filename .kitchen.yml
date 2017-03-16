@@ -1,10 +1,10 @@
 ---
 driver:
   name: lxd_cli
-  publish_image_name: "bb-base-ubuntu-1404"
+  publish_image_name: "bb-chef-server-ubuntu-1404"
   use_publish_image: true
-#  publish_image_before_destroy: true
-#  publish_image_overwrite: true
+  publish_image_before_destroy: true
+  publish_image_overwrite: true
 
 provisioner:
   name: chef_zero
