@@ -1,0 +1,7 @@
+suites:
+- name: bb_chef_server
+  driver_config:
+    ipv4: 10.100.0.11/24
+  run_list:
+  - recipe[bb_chef_server]
+  attributes:
