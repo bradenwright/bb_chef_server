@@ -7,31 +7,31 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe 'bb_base'
+
 org_id = node['bb_chef_server']['org']['id']
 org_name = node['bb_chef_server']['org']['name']
+vault_users = chef_vault_item('bb_users','braden')
 
-db_users = {
-  "username": "bwright",
-  "first_name": "Braden",
-  "last_name": "Wright",
-  "email": "braden.wright.it@gmail.com",
-  "password": "p@ssw0rd"
-}
-
-include_recipe 'bb_base'
 include_recipe 'chef-server'
 include_recipe 'chef-server::addons'
 #TODO: setup ssl
 #TODO: setup users
 
-bash 'chef_server_setup_user_bwright' do
-  code "chef-server-ctl user-create #{db_users['username']} #{db_users['first_name']} #{db_users['last_name']}  #{db_users['email']} #{db_users['password']} -f /tmp/#{db_users['username']}.key"
-  not_if { ::File.exist? '/tmp/bwright.key' }
+bash "chef_server_setup_user_#{vault_users['username']}" do
+  code "chef-server-ctl user-create #{vault_users['username']} #{vault_users['first_name']} #{vault_users['last_name']}  #{vault_users['email']} #{vault_users['password']} -f /tmp/#{vault_users['username']}.key"
+  not_if { ::File.exist? "/tmp/#{vault_users['username']}.key" }
 end
+
+#TODO: if /tmp/.key exists upload it to a data bag??? or don't save file at all???
 
 bash "chef_server_setup_org_#{org_id}" do
-  code "chef-server-ctl org-create #{org_id} #{org_name} -a bwright -f /etc/chef/#{org_name}-validator.pem"
-  not_if { ::File.exist? "/etc/chef/#{org_name}-validator.pem" }
+  code "chef-server-ctl org-create #{org_id} #{org_name} -a #{vault_users['username']} -f /etc/chef/#{org_id}-validator.pem"
+  not_if { ::File.exist? "/etc/chef/#{org_id}-validator.pem" }
 end
 
+# Download cookbooks via git
+# Upload cookbooks via knife?
+
 #TODO: upload cookbooks, data bags, etc
+
