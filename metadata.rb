@@ -10,10 +10,9 @@ supports	 'ubuntu'
 %w{
   bb_base
   chef-server
-  hostsfile
   ssl_certificate
 }.each do |ckbk|
   depends ckbk
 end
 
-  depends 'chef-ingredient', '~> 1.1'
+depends 'chef-ingredient', '~> 1.1'

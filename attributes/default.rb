@@ -27,5 +27,5 @@ EOS
 # ChefDK
 default['app']['git']['chef-repo']['url'] = 'https://github.com/bradenwright/chef-repo.git'
 default['app']['git']['chef-repo']['branch'] = 'master'
-default['app']['git']['cookbooks'] = %w{ bb_base bb_chef_server }
+default['app']['git']['cookbooks'] = %w{ bb_base bb_chef_server bb_sensu }
 

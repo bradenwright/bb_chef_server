@@ -60,33 +60,3 @@ link "#{vault_user['home_path']}/.chef/knife.rb" do
   to "#{vault_user['home_path']}/chef-repo/knife.rb"
 end
 
-hostsfile_entry node['ipaddress'] do
-  hostname node['chef-server']['api_fqdn']
-end
-
-
-
-=begin
-#mkdir .chef, I think
-file "#{node['jenkins']['master']['home']}/.chef/jenkins.pem" do
-  mode    0600
-  owner   node['jenkins']['master']['user']
-  group   node['jenkins']['master']['group']
-  content jenkins_secrets['jenkins_client_key']
-end
-
-# drop in the encrypted databag secret for use with knife and test-kitchen
-file "#{node['jenkins']['master']['home']}/.chef/encrypted_data_bag_secret" do
-  owner   node['jenkins']['master']['user']
-  group   node['jenkins']['master']['group']
-  mode    0770
-  content jenkins_secrets['encrypted_data_bag_secret']
-end
-
-bash 'knife ssl fetch' do
-  user node['jenkins']['master']['user']
-  cwd  "#{node['jenkins']['master']['home']}/.chef"
-  code 'knife ssl fetch'
-  only_if { ::Dir.glob("#{node['jenkins']['master']['home']}/.chef/trusted_certs/*").empty? }
-end
-=end
